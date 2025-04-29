@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi-Currency Loan EMI Calculator</title>
+    <style>
+        /* CSS Styles */
+        .emi-calculator-container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+        }
+        .emi-calculator-container h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .emi-calculator-container h2 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        .form-group label i {
+            margin-right: 8px;
+            color: #3498db;
+            width: 20px;
+            text-align: center;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .input-group {
+            display: flex;
+        }
+        .input-group .form-control:first-child {
+            flex: 3;
+            margin-right: 10px;
+        }
+        .input-group .form-control:last-child {
+            flex: 2;
+        }
+        .btn-calculate {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-calculate:hover {
+            background-color: #2980b9;
+        }
+        .btn-calculate i {
+            margin-right: 8px;
+        }
+        .result-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        .result-container h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+        .result-container h3 i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+        }
+        .result-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .result-label {
+            font-weight: bold;
+            color: #34495e;
+        }
+        .result-value {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .currency-flag {
+            display: inline-block;
+            width: 20px;
+            height: 15px;
+            margin-right: 5px;
+            vertical-align: middle;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        .npr-flag {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="#DC143C"/><rect width="40" height="30" fill="#003893"/><path d="M24 15a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" fill="white"/><path d="M21 15a6 6 0 1 1-12 0 6 6 0 0 1 12 0z" fill="#DC143C"/></svg>');
+        }
+        .inr-flag {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="10" y="0" fill="#FF9933"/><rect width="60" height="10" y="10" fill="white"/><rect width="60" height="10" y="20" fill="#138808"/><circle cx="30" cy="15" r="5" fill="#000080"/></svg>');
+        }
+        .usd-flag {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="#3C3B6E"/><rect width="60" height="2" y="2" fill="white"/><rect width="60" height="2" y="6" fill="white"/><rect width="60" height="2" y="10" fill="white"/><rect width="60" height="2" y="14" fill="white"/><rect width="60" height="2" y="18" fill="white"/><rect width="60" height="2" y="22" fill="white"/><rect width="60" height="2" y="26" fill="white"/><rect width="25" height="14" fill="#B22234"/><rect width="25" height="2" y="2" fill="white"/><rect width="25" height="2" y="6" fill="white"/><rect width="25" height="2" y="10" fill="white"/></svg>');
+        }
+    </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Calculator HTML -->
+    <div class="emi-calculator-container">
+        <h2><i class="fas fa-calculator"></i> Loan EMI Calculator</h2>
+        <form id="emi-calculator-form">
+            <div class="form-group">
+                <label for="loan-amount"><i class="fas fa-money-bill-wave"></i> Loan Amount</label>
+                <div class="input-group">
+                    <input type="number" id="loan-amount" class="form-control" placeholder="E.g. 100000" min="1000" step="100" required>
+                    <select id="loan-currency" class="form-control">
+                        <option value="NPR">NPR (रू)</option>
+                        <option value="INR">INR (₹)</option>
+                        <option value="USD">USD ($)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="interest-rate"><i class="fas fa-percentage"></i> Interest Rate (% per annum)</label>
+                <input type="number" id="interest-rate" class="form-control" placeholder="E.g. 10.5" step="0.01" min="0.1" max="30" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="loan-tenure"><i class="fas fa-clock"></i> Loan Tenure</label>
+                <div class="input-group">
+                    <input type="number" id="loan-tenure-value" class="form-control" placeholder="E.g. 5" min="1" required>
+                    <select id="loan-tenure-unit" class="form-control">
+                        <option value="years">Years</option>
+                        <option value="months">Months</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="submit" id="calculate-emi" class="btn-calculate">
+                <i class="fas fa-calculator"></i> Calculate EMI
+            </button>
+        </form>
+        
+        <div id="emi-result" class="result-container" style="display: none;">
+            <h3><i class="fas fa-chart-pie"></i> Payment Summary</h3>
+            <div class="result-item">
+                <span class="result-label">Monthly EMI:</span>
+                <span id="monthly-emi" class="result-value"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Total Interest:</span>
+                <span id="total-interest" class="result-value"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Total Payment:</span>
+                <span id="total-payment" class="result-value"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Loan Tenure:</span>
+                <span id="loan-duration" class="result-value"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#emi-calculator-form').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Show loading state
+                $('#calculate-emi').html('<i class="fas fa-spinner fa-spin"></i> Calculating...');
+                
+                // Get form values
+                var loan_amount = parseFloat($('#loan-amount').val());
+                var currency = $('#loan-currency').val();
+                var interest_rate = parseFloat($('#interest-rate').val());
+                var loan_tenure = parseInt($('#loan-tenure-value').val());
+                var tenure_unit = $('#loan-tenure-unit').val();
+                
+                // Validate inputs
+                if (!loan_amount || !interest_rate || !loan_tenure) {
+                    alert('Please fill all the fields');
+                    $('#calculate-emi').html('<i class="fas fa-calculator"></i> Calculate EMI');
+                    return;
+                }
+                
+                // Convert years to months if needed
+                var tenure_months = (tenure_unit === 'years') ? loan_tenure * 12 : loan_tenure;
+                var display_tenure = (tenure_unit === 'years') ? 
+                    loan_tenure + ' years (' + tenure_months + ' months)' : 
+                    tenure_months + ' months';
+                
+                // Monthly interest rate
+                var monthly_rate = interest_rate / 12 / 100;
+                
+                // Calculate EMI
+                var emi = 0;
+                if (monthly_rate > 0) {
+                    emi = (loan_amount * monthly_rate * Math.pow(1 + monthly_rate, tenure_months)) / 
+                          (Math.pow(1 + monthly_rate, tenure_months) - 1);
+                } else {
+                    emi = loan_amount / tenure_months;
+                }
+                
+                // Calculate total payment and interest
+                var total_payment = emi * tenure_months;
+                var total_interest = total_payment - loan_amount;
+                
+                // Get currency symbol
+                var currency_symbol = '';
+                var currency_class = '';
+                switch(currency) {
+                    case 'NPR':
+                        currency_symbol = 'रू';
+                        currency_class = 'npr-flag';
+                        break;
+                    case 'INR':
+                        currency_symbol = '₹';
+                        currency_class = 'inr-flag';
+                        break;
+                    case 'USD':
+                        currency_symbol = '$';
+                        currency_class = 'usd-flag';
+                        break;
+                }
+                
+                // Display results
+                $('#monthly-emi').html('<span class="currency-flag ' + currency_class + '"></span>' + 
+                                      currency_symbol + ' ' + emi.toFixed(2));
+                $('#total-interest').html('<span class="currency-flag ' + currency_class + '"></span>' + 
+                                         currency_symbol + ' ' + total_interest.toFixed(2));
+                $('#total-payment').html('<span class="currency-flag ' + currency_class + '"></span>' + 
+                                        currency_symbol + ' ' + total_payment.toFixed(2));
+                $('#loan-duration').text(display_tenure);
+                
+                // Show results
+                $('#emi-result').fadeIn();
+                
+                // Reset button
+                $('#calculate-emi').html('<i class="fas fa-calculator"></i> Calculate EMI');
+            });
+        });
+    </script>
+</body>
+</html>
