@@ -127,6 +127,9 @@
         .usd-flag {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="#3C3B6E"/><rect width="60" height="2" y="2" fill="white"/><rect width="60" height="2" y="6" fill="white"/><rect width="60" height="2" y="10" fill="white"/><rect width="60" height="2" y="14" fill="white"/><rect width="60" height="2" y="18" fill="white"/><rect width="60" height="2" y="22" fill="white"/><rect width="60" height="2" y="26" fill="white"/><rect width="25" height="14" fill="#B22234"/><rect width="25" height="2" y="2" fill="white"/><rect width="25" height="2" y="6" fill="white"/><rect width="25" height="2" y="10" fill="white"/></svg>');
         }
+        .eur-flag {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect width="60" height="30" fill="#003399"/><rect width="60" height="6" y="4" fill="#FFCC00"/><rect width="60" height="6" y="12" fill="#FFCC00"/><rect width="60" height="6" y="20" fill="#FFCC00"/></svg>');
+        }
     </style>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -144,6 +147,7 @@
                         <option value="NPR">NPR (रू)</option>
                         <option value="INR">INR (₹)</option>
                         <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
                     </select>
                 </div>
             </div>
@@ -236,7 +240,7 @@
                 var total_payment = emi * tenure_months;
                 var total_interest = total_payment - loan_amount;
                 
-                // Get currency symbol
+                // Get currency symbol and flag
                 var currency_symbol = '';
                 var currency_class = '';
                 switch(currency) {
@@ -251,6 +255,10 @@
                     case 'USD':
                         currency_symbol = '$';
                         currency_class = 'usd-flag';
+                        break;
+                    case 'EUR':
+                        currency_symbol = '€';
+                        currency_class = 'eur-flag';
                         break;
                 }
                 
